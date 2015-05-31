@@ -11,6 +11,25 @@ module Commitchamp
     def initialize
       @github = Github.new
     end
+
+    def prompt(token_request, valid_token)
+      puts token_request
+      input = gets.chomp
+      until input =~ valid_token
+        puts "Thats not a valid token."
+        puts token_request
+        input = gets.chomp
+      end
+      input
+    end
+
+    def valid_token_request
+      # not sure how to define a valid token here.
+      access_token = prompt("Please enter an access token:,(regex)")
+      contributors_data = @github.get_contributions(owner, repo, page=1)
+
+    end
+
   end
 end
 
