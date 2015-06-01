@@ -11,6 +11,10 @@ module Commitchamp
     def initialize
       @headers = { "Authorization" => "token #{OAUTH_TOKEN}",
                    "User-Agent" => "HTTParty" }
+      if OAUTH_TOKEN == nil
+        prompt
+      else
+      end
     end
 
     def get_contributions(owner, repo, page=1)
