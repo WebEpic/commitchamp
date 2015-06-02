@@ -11,21 +11,14 @@ module Commitchamp
     def initialize
       @headers = { "Authorization" => "token #{OAUTH_TOKEN}",
                    "User-Agent" => "HTTParty" }
-      if OAUTH_TOKEN == nil
-        prompt
-      else
-      end
     end
 
-    def get_contributions(owner, repo, page=1)
-      params = {
-        page: page
-      }
-      options = {
-        headers: headers,
-        query: params
-      }
-      self.class.get("repos/#{owner}/#{repo}/stats/contributors", options)
+    def get_user(username)
+      self.class.get("/users/#{username}", headers: @headers)
+    end
+
+    def get_contributions(owner, repo)
+      self.class.get("/repos/#{owner}/#{repo}/stats/contributors", headers: @headers)
     end
   end
 end
