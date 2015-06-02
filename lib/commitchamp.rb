@@ -19,6 +19,22 @@ module Commitchamp
       puts "Please enter a valid GitHub access token:"
       OAUTH_TOKEN = gets.chomp
     end
+
+    def import_contributors(repo_name)
+      repo = Repo.first_or_create(name: repo_name)
+      results = @github.get_contributions('WebEpic', repo_name)
+      results.each do |contribution|
+        user = User.first_or_create(name: contribution['author']['login'])
+        lines_added = contribution['weeks'].map { |x| x['a'] }.sum
+        lines_deleted = contribution['weeks'].map { |x| x['d'] }.sum
+        commits_made = contribution['weeks'].map { |x| x['c'] }.sum
+
+        user.contributions.create(lines_added: lines_added, 
+                                  lines_deleted: lines_deleted, 
+                                  commits_made: commits_made, 
+                                  repo_id: repo.id)
+      end
+    end
   end
 end
 
